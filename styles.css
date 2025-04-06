@@ -12,14 +12,20 @@ body {
 }
 
 .calculator {
-    background: rgb(3, 3, 3);       /* Match display background */
+    background: rgb(3, 3, 3);
     padding: 1.35rem;
     width: 405px;
-  
-    border: none;            /* Remove border */
-    border-radius: 0;        /* Remove rounded corners if not needed */
-  }
-  
+    
+    border-top: 2px solid #f08205;   /* Top border */
+    border-right: 2px solid #f08205; /* Right border */
+    border-bottom: 2px solid #f08205; /* Bottom border */
+    /* No border on the left side */
+    border-left: 2px solid #f08205;
+    border-radius: 0;  /* Remove rounded corners */
+    transform: scale(1.35);
+    transform-origin: center;
+}
+
 
 .display {
     background: rgb(3, 3, 3);       /* Match calculator background */
@@ -53,7 +59,7 @@ button {
     font-size: 1.2rem;
     border: 1px solid #080808;
     border-radius: 5px;
-    background: #fdae03;
+    background: #1862ac;
     cursor: pointer;
     transition: 0.2s;
   
@@ -65,14 +71,14 @@ background: #ddd;
 
 .clear {
     grid-column: span 2;
-    background: #111111;
-    color: rgb(12, 231, 107);
+    background: #eb8f06;
+    color: rgba(16, 16, 15, 0.705);
 }
 
 .delete {
     grid-column: span 2;
-    background: #0f0f10;
-    color: rgb(224, 221, 16);
+    background: #c064d0;
+    color: rgba(16, 15, 16, 0.934);
 }
 
 .calculator {

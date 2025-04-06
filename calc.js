@@ -29,6 +29,8 @@ function calculator() {
 }
 
 
+
+
 // const doMath= calculator();
 // doMath.add(5.3);
 // doMath.add(2);
