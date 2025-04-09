@@ -32,56 +32,52 @@ function displayContent(numbers) {
 
 let calculate = calculator(); 
 let lastClicked = "";
-let operatorHolder = "";
-let operatorHolder2 = "";
-let total = 0;
+let lastClickedHolder = "";
 
 buttonsContainer.addEventListener("click", function(e){
-        
         const checkList = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "."];
         const operation = ["+", "-", "*","÷"];
+
+        
+
         let keyPressed = e.target.textContent;
-
-        if(checkList.includes(keyPressed) && (operatorHolder)){
-            lastClicked = "";
-            operatorHolder = "";
-        }
-
-        // console.log("this is keyPressed:", keyPressed);
-        // console.log("this is lastClicked:", lastClicked);
-
-        // digital accumulation 
+        console.log("this is keyPressed:", keyPressed);
+        console.log("this is lastClicked:", lastClicked);
+        
+       
         if ((lastClicked.includes(".") && keyPressed === ".")){
             lastClicked  += "";
         }else if(checkList.includes(keyPressed)){
-            console.log("bug here");
             
             lastClicked  += keyPressed;
             displayContent(lastClicked);
-            
-        }
 
-
-        if(lastClicked &&  operation.includes(keyPressed)){
-            displayContent("123");
+        }else if(operation.includes(keyPressed)){
             switch(keyPressed){
                 case "+":
-                    console.log("worked!");
-               
-                    // console.log(typeof Number(lastClicked));
-                    displayContent(0);
-                    total += Number(lastClicked);
-                    console.log("this is total:", total);
-                    operatorHolder = keyPressed;
-                    operatorHolder2 = operatorHolder;
-                    displayContent(total);
+                    calculate.add(Number(lastClicked));
+                    lastClickedHolder = keyPressed;
+                    console.log("checking lastClickHolder", lastClickedHolder);
+                    
             }
 
         }
-
-       
         
-      
+        if(lastClickedHolder){
+            switch(lastClickedHolder){
+                case "+":
+                    console.log("hello worked?");
+                    calculate.add(Number(lastClicked));
+                    lastClickedHolder = "";
+
+
+                case "=":
+                    displayContent(calculate.getSum());
+                    lastClickedHolder = "";
+            }
+        }
+
+  
 
 
        
@@ -100,3 +96,7 @@ function reset(){
 }
 
 
+// bug 1. if clicked on any layout outside of the pad,
+// it will print the whole class ="button" out
+
+// 
