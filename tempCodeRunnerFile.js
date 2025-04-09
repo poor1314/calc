@@ -3,13 +3,13 @@ function calculator() {
     return {
       
 
-        subtract(input){
-            current -= input;
+        subtract(number1){
+            current -= number1;
         },
 
 
-        add(input) {
-            current += input;
+        add(number1) {
+            current += number1;
         },
      
         getSum(){
@@ -20,68 +20,88 @@ function calculator() {
 
 let buttonsContainer = document.querySelector(".buttons");
 let displayScreen = document.querySelector(".display");
+let displayMiniScreen = document.querySelector(".displayMini");
 let clearButton = document.querySelector(".clear");
 
 
 // // display numbers
-function displayContent(numbers) {
+function displayContent(number) {
 
-        displayScreen.textContent = numbers;
+    displayScreen.textContent = number;
 
 }
 
+function miniScreen(number2, operation) {
+
+
+    displayMiniScreen.textContent =  `${number2} ${operation}`;
+
+}
+
+
+
 let calculate = calculator(); 
-let lastClicked = "";
-let lastClickedHolder = "";
+let number1 = "";
+let number2 = "";
+let operation = "";
+let newNumber;
 
 buttonsContainer.addEventListener("click", function(e){
-        const checkList = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "."];
+        
+        const num = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "."];
         const operation = ["+", "-", "*","÷"];
-
-        
-
         let keyPressed = e.target.textContent;
-        console.log("this is keyPressed:", keyPressed);
-        console.log("this is lastClicked:", lastClicked);
-        
-       
-        if ((lastClicked.includes(".") && keyPressed === ".")){
-            lastClicked  += "";
-        }else if(checkList.includes(keyPressed)){
-            
-            lastClicked  += keyPressed;
-            displayContent(lastClicked);
 
-        }else if(operation.includes(keyPressed)){
+        // if(num.includes(keyPressed) && (operatorHolder)){
+        //     number1 = "";
+        //     operatorHolder = "";
+        // }
+
+        // console.log("this is keyPressed:", keyPressed);
+        // console.log("this is number1:", number1);
+
+        // digital accumulation 
+        if ((number1.includes(".") && keyPressed === ".")){
+            number1  += "";
+        }else if(num.includes(keyPressed)){
+         
+            number1  += keyPressed;
+            number2 = number1;
+            newNumber = true;
+            displayContent(number1);
+
+        }else if (number1 && operation.includes(keyPressed) && newNumber){
             switch(keyPressed){
                 case "+":
-                    calculate.add(Number(lastClicked));
-                    lastClickedHolder = keyPressed;
-                    console.log("checking lastClickHolder", lastClickedHolder);
-                    
-            }
 
+                    calculate.add(Number(number1));
+                  
+                    break;
+
+                case "-":
+
+
+
+
+               
+               
+            } 
+            // display previous number & operator 
+            displayContent(calculate.getSum());
+            miniScreen(calculate.getSum(), keyPressed);
+            
+            // a mechanic to prevent passing the if-statement logic
+            // by spamming operators 
+            // before this, if i had a number as number1, and i spam operator
+            // it will keep operating that number
+            newNumber = false;
+            // reset number1
+            number1 = "";
+ 
         }
-        
-        if(lastClickedHolder){
-            switch(lastClickedHolder){
-                case "+":
-                    console.log("hello worked?");
-                    calculate.add(Number(lastClicked));
-                    lastClickedHolder = "";
-
-
-                case "=":
-                    displayContent(calculate.getSum());
-                    lastClickedHolder = "";
-            }
-        }
-
-  
-
 
        
-      
+  
 }); 
 
 function appendingDigits(current, e){
@@ -96,7 +116,3 @@ function reset(){
 }
 
 
-// bug 1. if clicked on any layout outside of the pad,
-// it will print the whole class ="button" out
-
-// 
