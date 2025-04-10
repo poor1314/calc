@@ -1,118 +1,128 @@
+let buttonsContainer = document.querySelector(".buttons");
+let mainDisplay = document.querySelector(".display");
+let historyDisplay = document.querySelector(".displayMini");
+let clearButton = document.querySelector(".clear");
+
 function calculator() {
-    let current = 0;
+    let currentTotal = 0;
     return {
-      
-
-        subtract(number1){
-            current -= number1;
+        add(currentInput) {
+            currentTotal += currentInput;
         },
 
-
-        add(number1) {
-            current += number1;
+        subtract(currentInput) {
+            
         },
-     
-        getSum(){
-            return current
+
+        multiply(currentInput) {
+            currentTotal *= currentInput;
+        },
+
+        divide(currentInput) {
+            currentTotal /= currentInput;
+        },
+
+        getSum() {
+            return currentTotal;
+        },
+
+        erase() {
+            currentInput = "";
+            previousInput = "";
+            selectedOperator = "";
+            isNewInput = "";
+            mainDisplay.textContent = "Cleared!";
+            historyDisplay.textContent = "";
+
+            // this needs to be number
+            // else string + number = string 
+            // 33 + 66 = 3366
+            currentTotal = 0;
         },
     };
 }
 
-let buttonsContainer = document.querySelector(".buttons");
-let displayScreen = document.querySelector(".display");
-let displayMiniScreen = document.querySelector(".displayMini");
-let clearButton = document.querySelector(".clear");
-
-
-// // display numbers
 function displayContent(number) {
-
-    displayScreen.textContent = number;
-
+    mainDisplay.textContent = number;
 }
 
-function miniScreen(number2, operation) {
-
-
-    displayMiniScreen.textContent =  `${number2} ${operation}`;
-
+function miniScreen(previousInput, selectedOperator) {
+    historyDisplay.textContent = `${previousInput} ${selectedOperator}`;
 }
 
+let calculatorObj = calculator();
+let currentInput = "";
+let previousInput = "";
+let selectedOperator = "";
+let isNewInput;
 
+buttonsContainer.addEventListener("click", function(e) {
 
-let calculate = calculator(); 
-let number1 = "";
-let number2 = "";
-let operation = "";
-let newNumber;
+    const numberKeys = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "."];
+    const operatorKeys = ["+", "−", "×", "÷", "="];
+    let keyPressed = e.target.textContent;
 
-buttonsContainer.addEventListener("click", function(e){
-        
-        const num = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "."];
-        const operation = ["+", "-", "*","÷"];
-        let keyPressed = e.target.textContent;
+    console.log(keyPressed);
 
-        // if(num.includes(keyPressed) && (operatorHolder)){
-        //     number1 = "";
-        //     operatorHolder = "";
-        // }
+    if (keyPressed === "CLEAR") {
+        calculatorObj.erase();
+    }
 
-        // console.log("this is keyPressed:", keyPressed);
-        // console.log("this is number1:", number1);
+    // if(previousInput &&  )
+    // miniScreen(calculatorObj.getSum(), keyPressed, currentInput, result);
 
-        // digital accumulation 
-        if ((number1.includes(".") && keyPressed === ".")){
-            number1  += "";
-        }else if(num.includes(keyPressed)){
-         
-            number1  += keyPressed;
-            number2 = number1;
-            newNumber = true;
-            displayContent(number1);
+    if ((currentInput.includes(".") && keyPressed === ".")) {
+        currentInput += "";
 
-        }else if (number1 && operation.includes(keyPressed) && newNumber){
-            switch(keyPressed){
-                case "+":
+    } else if (numberKeys.includes(keyPressed)) {
 
-                    calculate.add(Number(number1));
-                  
-                    break;
+        currentInput += keyPressed;
+        previousInput = currentInput;
+        isNewInput = true;
+        displayContent(currentInput);
 
-                case "-":
+    } else if (currentInput && operatorKeys.includes(keyPressed) && isNewInput) {
+        console.log("made it passed last", keyPressed);
 
+        switch (keyPressed) {
+            case "+":
+                calculatorObj.add(Number(currentInput));
+                break;
 
+            case "−":
+                calculatorObj.subtract(Number(currentInput));
+                break;
 
+            case "×":
+                calculatorObj.multiply(Number(currentInput));
+                break;
 
-               
-               
-            } 
-            // display previous number & operator 
-            displayContent(calculate.getSum());
-            miniScreen(calculate.getSum(), keyPressed);
-            
-            // a mechanic to prevent passing the if-statement logic
-            // by spamming operators 
-            // before this, if i had a number as number1, and i spam operator
-            // it will keep operating that number
-            newNumber = false;
-            // reset number1
-            number1 = "";
- 
+            case "÷":
+                calculatorObj.divide(Number(currentInput));
+                break;
         }
 
-       
-  
-}); 
+        result = calculatorObj.getSum() + Number(previousInput);
+        mainDisplay.textContent = result;
+     
+        // display previous number & operator 
+        displayContent(calculatorObj.getSum());
+        miniScreen(calculatorObj.getSum(), keyPressed);
 
-function appendingDigits(current, e){
-    return current.concat(e);
-}
+        
 
+        // a mechanic to prevent passing the if-statement logic
+        // by spamming operators 
+        // before this, if i had a number as number1, and i spam operator
+        // it will keep operating that number
+        isNewInput = false;
+        currentInput = "";
+    }
+});
 
-// When done, reset display to 0
-// also reset current
-function reset(){
-    displayScreen.textContent = 0;
-}
+// fix some operations
+// add delete function
 
-
+// make miniScreen display 55 + 55 + 55 + 55 = ?
+// the input will be added to the number
+// also update the result
