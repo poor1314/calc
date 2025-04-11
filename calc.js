@@ -64,7 +64,7 @@ function calculator() {
             // selectedOperator = "";
             isNewInput = "";
             mainDisplay.textContent = "Cleared!";
-            historyDisplay.textContent = "";
+
             subtractFlag = true;
             multiplyFlag = true;
             divideFlag = true;
@@ -72,6 +72,7 @@ function calculator() {
             // else string + number = string 
             // 33 + 66 = 3366
             currentTotal = 0;
+            
         },
     };
 }
@@ -84,6 +85,12 @@ function miniScreen(previousInput, selectedOperator) {
     historyDisplay.textContent = `${previousInput} ${selectedOperator}`;
 }
 
+// if the previous history & current input is the same number
+// display the below
+function miniScreenPlus(previousInput, selectedOperator, current){
+    historyDisplay.textContent = `${previousInput} ${selectedOperator} ${current}`;
+}
+
 let calculatorObj = calculator();
 let currentInput = "";
 let previousInput = "";
@@ -91,6 +98,7 @@ let previousInput = "";
 let isNewInput;
 let saveOperator = "";
 let displayEqualSign;
+
 
 buttonsContainer.addEventListener("click", function(e) {
 
@@ -100,16 +108,14 @@ buttonsContainer.addEventListener("click", function(e) {
 
     console.log("keyPressed", keyPressed);
 
-    if (keyPressed === "CLEAR") {
-        calculatorObj.erase();
-    }
+   
 
-    // if (keyPressed === "DELETE"){
-    //     console.log("worked?");
-    //     console.log(currentInput);
+    if (keyPressed === "DELETE"){
+        console.log("worked?");
+        console.log(currentInput);
        
-    //     displayContent( currentInput.slice(0, -1));
-    // }
+        displayContent( currentInput.slice(0, -1));
+    }
 
 
     if ((currentInput.includes(".") && keyPressed === ".")) {
@@ -183,14 +189,29 @@ buttonsContainer.addEventListener("click", function(e) {
         saveOperator = keyPressed;
     }
     // live time update on operator for mini-screen 
- 
-   
     if(displayEqualSign){
         miniScreen(saveOperator, calculatorObj.getSum());
         displayEqualSign = false;
+
+        
+    }if (calculatorObj.getSum() === Number(currentInput)){
+        miniScreenPlus(calculatorObj.getSum(), saveOperator, currentInput);
     }else{
         miniScreen(calculatorObj.getSum(), saveOperator);
     }
+
+    if (keyPressed === "CLEAR") {
+        calculatorObj.erase();
+        historyDisplay.textContent = "";
+    }
+
+    if(keyPressed === "="){
+        miniScreen("=", calculatorObj.getSum())
+    }
+
+    
+
+   
   
 });
 
