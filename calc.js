@@ -95,11 +95,12 @@ function miniScreenPlus(previousInput, selectedOperator, current){
 let calculatorObj = calculator();
 let currentInput = "";
 let previousInput = "";
-// let selectedOperator = "";
+
 let isNewInput;
 let saveOperator = "";
 let displayEqualSign;
-let stringArray 
+
+
 
 
 buttonsContainer.addEventListener("click", function(e) {
@@ -109,6 +110,11 @@ buttonsContainer.addEventListener("click", function(e) {
     let keyPressed = e.target.textContent;
 
     console.log("keyPressed", keyPressed);
+    console.log("currentInput",currentInput);
+    console.log("previousInput",  previousInput);
+//    console.log("selectedOperator", selectedOperator);
+    console.log("saveOperator", saveOperator);
+    console.log("");
 
 
     if ((currentInput.includes(".") && keyPressed === ".")) {
@@ -118,29 +124,19 @@ buttonsContainer.addEventListener("click", function(e) {
     }else if (numberKeys.includes(keyPressed)) {
 
         currentInput += keyPressed;
-        // console.log(typeof currentInput);
-        
-        // previousInput = currentInput;
         isNewInput = true;
         displayContent(currentInput);
         
 
     }else if (keyPressed === "DELETE"){
-        // console.log("currentInput", currentInput);
+       
         if(currentInput){
-            stringArray = currentInput.split("")
-            stringArray.splice(-1,1) 
-
-            currentInput = stringArray.join("");
+            currentInput = currentInput.slice(0, -1);
             displayContent(currentInput);
         }
-       
+   
     }else if (currentInput && operatorKeys.includes(keyPressed) && isNewInput) {
-    //    console.log("currentInput",currentInput);
-    //    console.log("previousInput",  previousInput);
-    // //    console.log("selectedOperator", selectedOperator);
-    //    console.log("saveOperator", saveOperator);
-    //    console.log("");
+   
        
    
         switch (keyPressed) {
@@ -174,14 +170,7 @@ buttonsContainer.addEventListener("click", function(e) {
                     displayEqualSign = true;
                 }
         }
-        // result = calculatorObj.getSum() + Number(previousInput);
-        // mainDisplay.textContent = result;
-     
-        // display previous number & operator 
-        displayContent(calculatorObj.getSum());
-
-
-
+       
         // a mechanic to prevent passing the if-statement logic
         // by spamming operators 
         // before this, if i had a number as number1, and i spam operator
@@ -191,6 +180,7 @@ buttonsContainer.addEventListener("click", function(e) {
     }
     if (operatorKeys.includes(keyPressed)){
         saveOperator = keyPressed;
+        displayContent("");
     }
     // live time update on operator for mini-screen 
     if(displayEqualSign){
@@ -213,10 +203,7 @@ buttonsContainer.addEventListener("click", function(e) {
         miniScreen("=", calculatorObj.getSum())
     }
 
-    
 
-   
-  
 });
 
 // calc become buggy when dealing with 0
