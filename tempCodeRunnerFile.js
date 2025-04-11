@@ -5,21 +5,53 @@ let clearButton = document.querySelector(".clear");
 
 function calculator() {
     let currentTotal = 0;
+    let subtractFlag = true; // 1st currentTotal will be input itself
+    let multiplyFlag = true;  // 1st currentTotal * 1
+    let divideFlag = true;
     return {
         add(currentInput) {
             currentTotal += currentInput;
+            subtractFlag = false; 
+            multiplyFlag = false;  
+            divideFlag = false;
         },
 
         subtract(currentInput) {
-            
+
+            if(subtractFlag){
+                currentTotal = currentInput;
+            }else{
+                currentTotal -= currentInput;
+            }
+            subtractFlag = false; 
+            multiplyFlag = false;  
+            divideFlag = false;
+
         },
 
         multiply(currentInput) {
-            currentTotal *= currentInput;
+           
+            if(multiplyFlag){
+                currentTotal = currentInput;
+            }else{
+                currentTotal *= currentInput;
+            }
+            subtractFlag = false; 
+            multiplyFlag = false;  
+            divideFlag = false;
+          
         },
 
         divide(currentInput) {
-            currentTotal /= currentInput;
+             
+            if(divideFlag){
+                currentTotal = currentInput;
+            }else{
+                currentTotal /= currentInput;
+            }
+            subtractFlag = false; 
+            multiplyFlag = false;  
+            divideFlag = false;
         },
 
         getSum() {
@@ -29,11 +61,13 @@ function calculator() {
         erase() {
             currentInput = "";
             previousInput = "";
-            selectedOperator = "";
+            // selectedOperator = "";
             isNewInput = "";
             mainDisplay.textContent = "Cleared!";
             historyDisplay.textContent = "";
-
+            subtractFlag = true;
+            multiplyFlag = true;
+            divideFlag = true;
             // this needs to be number
             // else string + number = string 
             // 33 + 66 = 3366
@@ -53,8 +87,10 @@ function miniScreen(previousInput, selectedOperator) {
 let calculatorObj = calculator();
 let currentInput = "";
 let previousInput = "";
-let selectedOperator = "";
+// let selectedOperator = "";
 let isNewInput;
+let saveOperator = "";
+let displayEqualSign;
 
 buttonsContainer.addEventListener("click", function(e) {
 
@@ -62,17 +98,20 @@ buttonsContainer.addEventListener("click", function(e) {
     const operatorKeys = ["+", "−", "×", "÷", "="];
     let keyPressed = e.target.textContent;
 
-    console.log(keyPressed);
+    console.log("keyPressed", keyPressed);
 
     if (keyPressed === "CLEAR") {
         calculatorObj.erase();
     }
 
-    // if(previousInput &&  )
-    // miniScreen(calculatorObj.getSum(), keyPressed, currentInput, result);
+    // if (keyPressed === "DELETE"){
+
+    // }
+
 
     if ((currentInput.includes(".") && keyPressed === ".")) {
         currentInput += "";
+     
 
     } else if (numberKeys.includes(keyPressed)) {
 
@@ -82,8 +121,13 @@ buttonsContainer.addEventListener("click", function(e) {
         displayContent(currentInput);
 
     } else if (currentInput && operatorKeys.includes(keyPressed) && isNewInput) {
-        console.log("made it passed last", keyPressed);
-
+       console.log("currentInput",currentInput);
+       console.log("previousInput",  previousInput);
+    //    console.log("selectedOperator", selectedOperator);
+       console.log("saveOperator", saveOperator);
+       console.log("");
+       
+   
         switch (keyPressed) {
             case "+":
                 calculatorObj.add(Number(currentInput));
@@ -100,16 +144,28 @@ buttonsContainer.addEventListener("click", function(e) {
             case "÷":
                 calculatorObj.divide(Number(currentInput));
                 break;
+            
+            case "=":
+                if(saveOperator && calculatorObj.getSum()){
+                    if(saveOperator === "+"){
+                        calculatorObj.add(Number(currentInput));
+                    }else if (saveOperator === "-"){
+                        calculatorObj.subtract(Number(currentInput));
+                    }else if (saveOperator === "×"){
+                        calculatorObj.multiply(Number(currentInput));
+                    }else if (saveOperator === "÷"){
+                        calculatorObj.divide(Number(currentInput));
+                    }
+                    displayEqualSign = true;
+                }
         }
-
-        result = calculatorObj.getSum() + Number(previousInput);
-        mainDisplay.textContent = result;
+        // result = calculatorObj.getSum() + Number(previousInput);
+        // mainDisplay.textContent = result;
      
         // display previous number & operator 
         displayContent(calculatorObj.getSum());
-        miniScreen(calculatorObj.getSum(), keyPressed);
 
-        
+
 
         // a mechanic to prevent passing the if-statement logic
         // by spamming operators 
@@ -118,6 +174,19 @@ buttonsContainer.addEventListener("click", function(e) {
         isNewInput = false;
         currentInput = "";
     }
+    if (operatorKeys.includes(keyPressed)){
+        saveOperator = keyPressed;
+    }
+    // live time update on operator for mini-screen 
+ 
+   
+    if(displayEqualSign){
+        miniScreen(saveOperator, calculatorObj.getSum());
+        displayEqualSign = false;
+    }else{
+        miniScreen(calculatorObj.getSum(), saveOperator);
+    }
+  
 });
 
 // fix some operations
