@@ -8,6 +8,7 @@ function calculator() {
     let subtractFlag = true; // 1st currentTotal will be input itself
     let multiplyFlag = true;  // 1st currentTotal * 1
     let divideFlag = true;
+
     return {
         add(currentInput) {
             currentTotal += currentInput;
@@ -98,6 +99,7 @@ let previousInput = "";
 let isNewInput;
 let saveOperator = "";
 let displayEqualSign;
+let stringArray 
 
 
 buttonsContainer.addEventListener("click", function(e) {
@@ -108,35 +110,37 @@ buttonsContainer.addEventListener("click", function(e) {
 
     console.log("keyPressed", keyPressed);
 
-   
-
-    if (keyPressed === "DELETE"){
-        console.log("worked?");
-        console.log(currentInput);
-       
-        displayContent( currentInput.slice(0, -1));
-    }
-
 
     if ((currentInput.includes(".") && keyPressed === ".")) {
         currentInput += "";
      
 
-    } else if (numberKeys.includes(keyPressed)) {
+    }else if (numberKeys.includes(keyPressed)) {
 
         currentInput += keyPressed;
-        console.log(typeof currentInput);
+        // console.log(typeof currentInput);
         
-        previousInput = currentInput;
+        // previousInput = currentInput;
         isNewInput = true;
         displayContent(currentInput);
+        
 
-    } else if (currentInput && operatorKeys.includes(keyPressed) && isNewInput) {
-       console.log("currentInput",currentInput);
-       console.log("previousInput",  previousInput);
-    //    console.log("selectedOperator", selectedOperator);
-       console.log("saveOperator", saveOperator);
-       console.log("");
+    }else if (keyPressed === "DELETE"){
+        // console.log("currentInput", currentInput);
+        if(currentInput){
+            stringArray = currentInput.split("")
+            stringArray.splice(-1,1) 
+
+            currentInput = stringArray.join("");
+            displayContent(currentInput);
+        }
+       
+    }else if (currentInput && operatorKeys.includes(keyPressed) && isNewInput) {
+    //    console.log("currentInput",currentInput);
+    //    console.log("previousInput",  previousInput);
+    // //    console.log("selectedOperator", selectedOperator);
+    //    console.log("saveOperator", saveOperator);
+    //    console.log("");
        
    
         switch (keyPressed) {
@@ -215,9 +219,4 @@ buttonsContainer.addEventListener("click", function(e) {
   
 });
 
-// fix some operations
-// add delete function
-
-// make miniScreen display 55 + 55 + 55 + 55 = ?
-// the input will be added to the number
-// also update the result
+// calc become buggy when dealing with 0
