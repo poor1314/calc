@@ -61,8 +61,8 @@ function calculator() {
 
         erase() {
             currentInput = "";
-            previousInput = "";
-            // selectedOperator = "";
+          
+            saveOperator = "";
             isNewInput = "";
             mainDisplay.textContent = "Cleared!";
 
@@ -86,21 +86,11 @@ function miniScreen(previousInput, selectedOperator) {
     historyDisplay.textContent = `${previousInput} ${selectedOperator}`;
 }
 
-// if the previous history & current input is the same number
-// display the below
-function miniScreenPlus(previousInput, selectedOperator, current){
-    historyDisplay.textContent = `${previousInput} ${selectedOperator} ${current}`;
-}
 
 let calculatorObj = calculator();
-let currentInput = "";
-let previousInput = "";
-
-let isNewInput;
+let currentInput = ""
 let saveOperator = "";
-let displayEqualSign;
-
-
+let isNewInput;
 
 
 buttonsContainer.addEventListener("click", function(e) {
@@ -111,7 +101,7 @@ buttonsContainer.addEventListener("click", function(e) {
 
     console.log("keyPressed", keyPressed);
     console.log("currentInput",currentInput);
-    console.log("previousInput",  previousInput);
+  
 //    console.log("selectedOperator", selectedOperator);
     console.log("saveOperator", saveOperator);
     console.log("");
@@ -121,23 +111,21 @@ buttonsContainer.addEventListener("click", function(e) {
         currentInput += "";
      
 
-    }else if (numberKeys.includes(keyPressed)) {
+    }else if(numberKeys.includes(keyPressed)) {
 
         currentInput += keyPressed;
         isNewInput = true;
         displayContent(currentInput);
         
 
-    }else if (keyPressed === "DELETE"){
+    }else if(keyPressed === "DELETE"){
        
         if(currentInput){
             currentInput = currentInput.slice(0, -1);
             displayContent(currentInput);
         }
    
-    }else if (currentInput && operatorKeys.includes(keyPressed) && isNewInput) {
-   
-       
+    }else if(currentInput && operatorKeys.includes(keyPressed) && isNewInput) {
    
         switch (keyPressed) {
             case "+":
@@ -167,7 +155,7 @@ buttonsContainer.addEventListener("click", function(e) {
                     }else if (saveOperator === "÷"){
                         calculatorObj.divide(Number(currentInput));
                     }
-                    displayEqualSign = true;
+                   
                 }
         }
        
@@ -178,30 +166,26 @@ buttonsContainer.addEventListener("click", function(e) {
         isNewInput = false;
         currentInput = "";
     }
-    if (operatorKeys.includes(keyPressed)){
+    
+
+    if(operatorKeys.includes(keyPressed)){
         saveOperator = keyPressed;
         displayContent("");
-    }
-    // live time update on operator for mini-screen 
-    if(displayEqualSign){
-        miniScreen(saveOperator, calculatorObj.getSum());
-        displayEqualSign = false;
-
-        
-    }if (calculatorObj.getSum() === Number(currentInput)){
-        miniScreenPlus(calculatorObj.getSum(), saveOperator, currentInput);
-    }else{
         miniScreen(calculatorObj.getSum(), saveOperator);
     }
 
+
+    if(keyPressed === "="){
+        // saveOperator = keyPressed;
+        displayContent("");
+        miniScreen("=", calculatorObj.getSum());
+    }
+    
     if (keyPressed === "CLEAR") {
         calculatorObj.erase();
         historyDisplay.textContent = "";
     }
 
-    if(keyPressed === "="){
-        miniScreen("=", calculatorObj.getSum())
-    }
 
 
 });
