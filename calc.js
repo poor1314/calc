@@ -56,12 +56,12 @@ function calculator() {
         },
 
         getSum() {
+            // return Math.round(currentTotal);
             return currentTotal;
         },
 
         erase() {
             currentInput = "";
-          
             saveOperator = "";
             isNewInput = "";
             mainDisplay.textContent = "Cleared!";
@@ -88,7 +88,8 @@ function miniScreen(previousInput, selectedOperator) {
 
 
 let calculatorObj = calculator();
-let currentInput = ""
+let currentInput = "";
+let historyInput = "";
 let saveOperator = "";
 let isNewInput;
 
@@ -99,12 +100,11 @@ buttonsContainer.addEventListener("click", function(e) {
     const operatorKeys = ["+", "−", "×", "÷", "="];
     let keyPressed = e.target.textContent;
 
-    console.log("keyPressed", keyPressed);
-    console.log("currentInput",currentInput);
-  
-//    console.log("selectedOperator", selectedOperator);
-    console.log("saveOperator", saveOperator);
-    console.log("");
+    // console.log("keyPressed", keyPressed);
+    // console.log("currentInput",currentInput);
+    // console.log("saveOperator", saveOperator);
+    // console.log("calculatorObj.getSum()", calculatorObj.getSum());
+    // console.log("");
 
 
     if ((currentInput.includes(".") && keyPressed === ".")) {
@@ -114,6 +114,7 @@ buttonsContainer.addEventListener("click", function(e) {
     }else if(numberKeys.includes(keyPressed)) {
 
         currentInput += keyPressed;
+        historyInput = currentInput;
         isNewInput = true;
         displayContent(currentInput);
         
@@ -155,7 +156,7 @@ buttonsContainer.addEventListener("click", function(e) {
                     }else if (saveOperator === "÷"){
                         calculatorObj.divide(Number(currentInput));
                     }
-                   
+                    
                 }
         }
        
@@ -185,7 +186,6 @@ buttonsContainer.addEventListener("click", function(e) {
         calculatorObj.erase();
         historyDisplay.textContent = "";
     }
-
 
 
 });
