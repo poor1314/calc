@@ -9,12 +9,10 @@ let historyDisplay = document.querySelector(".displayMini");
 
 calculatorButtons.addEventListener("click", function(e){
     let buttonValue = e.target.textContent;
-
     const numberList = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "."];
     const operatorList = ["+", "-", "x", "÷", "="];
 
     if(numberList.includes(buttonValue)) updatePrimaryDisplay(buttonValue);
-    
     if(buttonValue === "=")secondOperand = currentInputBuffer;
     
     console.log("current buttonValue", buttonValue);
@@ -26,7 +24,7 @@ calculatorButtons.addEventListener("click", function(e){
     
     if(buttonValue === "CLEAR") resetCalculator();
     else if(buttonValue === "DELETE") updatePrimaryDisplay(deleteLastInput());
-
+    // else if(buttonValue === "=") secondOperand = currentInputBuffer;
     else if(firstOperand && selectedOperator && secondOperand && buttonValue === "="){
         secondOperand = currentInputBuffer;
         firstOperand = performOperation(Number(firstOperand), selectedOperator, Number(secondOperand)); 
@@ -63,11 +61,11 @@ function ensureSingleDecimal(number){
 }
 
 function performOperation(firstOperand, selectedOperator, secondOperand){
-    if(selectedOperator === "+") firstOperand += secondOperand;
-    else if (selectedOperator === "-") firstOperand -= secondOperand;
-    else if (selectedOperator === "x") firstOperand *= secondOperand;
-    else if (selectedOperator === "÷") firstOperand /= secondOperand;
-    return firstOperand;
+    if(selectedOperator === "+") return firstOperand + secondOperand;
+    else if (selectedOperator === "-") return firstOperand - secondOperand;
+    else if (selectedOperator === "x") return firstOperand * secondOperand;
+    else if (selectedOperator === "÷") return firstOperand / secondOperand;
+   
 }
 
 function updatePrimaryDisplay(number){
@@ -81,13 +79,13 @@ function updateHistoryPanel(buttonValue, firstOperand){
 }
 
 function deleteLastInput(){
-    
     if(!currentInputBuffer){
         firstOperand = firstOperand.slice(0, -1);
         return firstOperand;
-    } 
-    currentInputBuffer = currentInputBuffer.slice(0, -1);
-    return currentInputBuffer;
+    }else {
+        currentInputBuffer = currentInputBuffer.slice(0, -1);
+        return currentInputBuffer;
+    }
 }
 
 function resetCalculator(){
