@@ -30,6 +30,7 @@ calculatorButtons.addEventListener("click", function(e){
     else if(firstOperand && selectedOperator && secondOperand && buttonValue === "="){
         secondOperand = currentInputBuffer;
         firstOperand = performOperation(Number(firstOperand), selectedOperator, Number(secondOperand)); 
+        resetOperatorAndBuffer(); 
         updateHistoryPanel(buttonValue, firstOperand);
         updatePrimaryDisplay("");
     }
@@ -66,8 +67,6 @@ function performOperation(firstOperand, selectedOperator, secondOperand){
     else if (selectedOperator === "-") firstOperand -= secondOperand;
     else if (selectedOperator === "x") firstOperand *= secondOperand;
     else if (selectedOperator === "÷") firstOperand /= secondOperand;
-
-    resetOperatorAndBuffer(); 
     return firstOperand;
 }
 
@@ -101,8 +100,6 @@ function resetCalculator(){
 }
 
 function resetOperatorAndBuffer(){
-    firstOperand = "";
-    selectedOperator = "";
     currentInputBuffer = "";
     secondOperand = "";
 }
