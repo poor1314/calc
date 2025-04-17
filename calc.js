@@ -13,7 +13,7 @@ calculatorButtons.addEventListener("click", function(e){
     const operatorList = ["+", "-", "x", "÷", "="];
 
     if(numberList.includes(buttonValue)) updatePrimaryDisplay(buttonValue);
-    if(buttonValue === "=")secondOperand = currentInputBuffer;
+    if(buttonValue === "=") secondOperand = currentInputBuffer;
     
     console.log("current buttonValue", buttonValue);
     console.log("firstOperand", firstOperand);
@@ -25,7 +25,7 @@ calculatorButtons.addEventListener("click", function(e){
     if(buttonValue === "CLEAR") resetCalculator();
     else if(buttonValue === "DELETE") updatePrimaryDisplay(deleteLastInput());
     // else if(buttonValue === "=") secondOperand = currentInputBuffer;
-    else if(firstOperand && selectedOperator && secondOperand && buttonValue === "="){
+    else if((firstOperand || Number(firstOperand) === 0 ) && selectedOperator && secondOperand && buttonValue === "="){
         secondOperand = currentInputBuffer;
         firstOperand = performOperation(Number(firstOperand), selectedOperator, Number(secondOperand)); 
         resetOperatorAndBuffer(); 
