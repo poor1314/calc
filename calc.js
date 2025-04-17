@@ -1,193 +1,108 @@
-let buttonsContainer = document.querySelector(".buttons");
-let mainDisplay = document.querySelector(".display");
+let firstOperand = "";
+let secondOperand = "";
+let currentInputBuffer = "";
+let selectedOperator = "";
+
+let calculatorButtons = document.querySelector(".buttons");
+let primaryDisplay = document.querySelector(".display");
 let historyDisplay = document.querySelector(".displayMini");
-let clearButton = document.querySelector(".clear");
 
-function calculator() {
-    let currentTotal = 0;
-    let subtractFlag = true; // 1st currentTotal will be input itself
-    let multiplyFlag = true;  // 1st currentTotal * 1
-    let divideFlag = true;
+calculatorButtons.addEventListener("click", function(e){
+    let buttonValue = e.target.textContent;
 
-    return {
-        add(currentInput) {
-            currentTotal += currentInput;
-            subtractFlag = false; 
-            multiplyFlag = false;  
-            divideFlag = false;
-        },
+    const numberList = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "."];
+    const operatorList = ["+", "-", "x", "÷", "="];
 
-        subtract(currentInput) {
-
-            if(subtractFlag){
-                currentTotal = currentInput;
-            }else{
-                currentTotal -= currentInput;
-            }
-            subtractFlag = false; 
-            multiplyFlag = false;  
-            divideFlag = false;
-
-        },
-
-        multiply(currentInput) {
-           
-            if(multiplyFlag){
-                currentTotal = currentInput;
-            }else{
-                currentTotal *= currentInput;
-            }
-            subtractFlag = false; 
-            multiplyFlag = false;  
-            divideFlag = false;
-          
-        },
-
-        divide(currentInput) {
-             
-            if(divideFlag){
-                currentTotal = currentInput;
-            }else{
-                currentTotal /= currentInput;
-            }
-            subtractFlag = false; 
-            multiplyFlag = false;  
-            divideFlag = false;
-        },
-
-        getSum() {
-            // return Math.round(currentTotal);
-            return currentTotal;
-        },
-
-        erase() {
-            currentInput = "";
-            saveOperator = "";
-            isNewInput = "";
-            mainDisplay.textContent = "Cleared!";
-
-            subtractFlag = true;
-            multiplyFlag = true;
-            divideFlag = true;
-            // this needs to be number
-            // else string + number = string 
-            // 33 + 66 = 3366
-            currentTotal = 0;
-            
-        },
-    };
-}
-
-function displayContent(number) {
-    mainDisplay.textContent = number;
-}
-
-function miniScreen(previousInput, selectedOperator) {
-    historyDisplay.textContent = `${previousInput} ${selectedOperator}`;
-}
-
-
-let calculatorObj = calculator();
-let currentInput = "";
-let historyInput = "";
-let saveOperator = "";
-let isNewInput;
-
-
-buttonsContainer.addEventListener("click", function(e) {
-
-    const numberKeys = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "."];
-    const operatorKeys = ["+", "−", "×", "÷", "="];
-    let keyPressed = e.target.textContent;
-
-    // console.log("keyPressed", keyPressed);
-    // console.log("currentInput",currentInput);
-    // console.log("saveOperator", saveOperator);
-    // console.log("calculatorObj.getSum()", calculatorObj.getSum());
-    // console.log("");
-
-
-    if ((currentInput.includes(".") && keyPressed === ".")) {
-        currentInput += "";
-     
-
-    }else if(numberKeys.includes(keyPressed)) {
-
-        currentInput += keyPressed;
-        historyInput = currentInput;
-        isNewInput = true;
-        displayContent(currentInput);
-        
-
-    }else if(keyPressed === "DELETE"){
-       
-        if(currentInput){
-            currentInput = currentInput.slice(0, -1);
-            displayContent(currentInput);
-        }
-   
-    }else if(currentInput && operatorKeys.includes(keyPressed) && isNewInput) {
-   
-        switch (keyPressed) {
-            case "+":
-                calculatorObj.add(Number(currentInput));
-                break;
-
-            case "−":
-                calculatorObj.subtract(Number(currentInput));
-                break;
-
-            case "×":
-                calculatorObj.multiply(Number(currentInput));
-                break;
-
-            case "÷":
-                calculatorObj.divide(Number(currentInput));
-                break;
-            
-            case "=":
-                if(saveOperator && calculatorObj.getSum()){
-                    if(saveOperator === "+"){
-                        calculatorObj.add(Number(currentInput));
-                    }else if (saveOperator === "−"){
-                        calculatorObj.subtract(Number(currentInput));
-                    }else if (saveOperator === "×"){
-                        calculatorObj.multiply(Number(currentInput));
-                    }else if (saveOperator === "÷"){
-                        calculatorObj.divide(Number(currentInput));
-                    }
-                    
-                }
-        }
-       
-        // a mechanic to prevent passing the if-statement logic
-        // by spamming operators 
-        // before this, if i had a number as number1, and i spam operator
-        // it will keep operating that number
-        isNewInput = false;
-        currentInput = "";
-    }
+    if(numberList.includes(buttonValue)) updatePrimaryDisplay(buttonValue);
     
-
-    if(operatorKeys.includes(keyPressed)){
-        saveOperator = keyPressed;
-        displayContent("");
-        miniScreen(calculatorObj.getSum(), saveOperator);
-    }
-
-
-    if(keyPressed === "="){
-        // saveOperator = keyPressed;
-        displayContent("");
-        miniScreen("=", calculatorObj.getSum());
-    }
+    if(buttonValue === "=")secondOperand = currentInputBuffer;
     
-    if (keyPressed === "CLEAR") {
-        calculatorObj.erase();
-        historyDisplay.textContent = "";
+    console.log("current buttonValue", buttonValue);
+    console.log("firstOperand", firstOperand);
+    console.log("secondOperand", secondOperand);
+    console.log("selectedOperator", selectedOperator);
+    console.log("currentInputBuffer", currentInputBuffer);
+    console.log("");   
+    
+    if(buttonValue === "CLEAR") resetCalculator();
+    else if(buttonValue === "DELETE") updatePrimaryDisplay(deleteLastInput());
+
+    else if(firstOperand && selectedOperator && secondOperand && buttonValue === "="){
+        secondOperand = currentInputBuffer;
+        firstOperand = performOperation(Number(firstOperand), selectedOperator, Number(secondOperand)); 
+        updateHistoryPanel(buttonValue, firstOperand);
+        updatePrimaryDisplay("");
     }
-
-
+    else if(numberList.includes(buttonValue))updatePrimaryDisplay(appendToActiveOperand(buttonValue));
+    else if(operatorList.includes(buttonValue)){
+        selectedOperator = buttonValue;
+        updateHistoryPanel(selectedOperator, firstOperand);
+        updatePrimaryDisplay(currentInputBuffer);
+    }
 });
 
-// calc become buggy when dealing with 0
+function appendToActiveOperand(buttonValue){
+    if(!(selectedOperator)){
+        if(buttonValue === "."){
+            firstOperand = ensureSingleDecimal(firstOperand);
+        }else firstOperand += buttonValue;
+        return firstOperand;
+
+    }else{
+        if(buttonValue === "."){
+            currentInputBuffer = ensureSingleDecimal(currentInputBuffer);
+        }else currentInputBuffer += buttonValue;
+        return currentInputBuffer;
+    }
+}
+
+function ensureSingleDecimal(number){
+    if (!number.includes(".")) return number += ".";  
+    return number;
+}
+
+function performOperation(firstOperand, selectedOperator, secondOperand){
+    if(selectedOperator === "+") firstOperand += secondOperand;
+    else if (selectedOperator === "-") firstOperand -= secondOperand;
+    else if (selectedOperator === "x") firstOperand *= secondOperand;
+    else if (selectedOperator === "÷") firstOperand /= secondOperand;
+
+    resetOperatorAndBuffer(); 
+    return firstOperand;
+}
+
+function updatePrimaryDisplay(number){
+    if(!currentInputBuffer) primaryDisplay.textContent = "";
+    primaryDisplay.textContent = number;
+}
+
+function updateHistoryPanel(buttonValue, firstOperand){
+    if (buttonValue === "=")  historyDisplay.textContent = `${buttonValue} ${firstOperand}`;
+    else historyDisplay.textContent = `${firstOperand} ${buttonValue}`;
+}
+
+function deleteLastInput(){
+    
+    if(!currentInputBuffer){
+        firstOperand = firstOperand.slice(0, -1);
+        return firstOperand;
+    } 
+    currentInputBuffer = currentInputBuffer.slice(0, -1);
+    return currentInputBuffer;
+}
+
+function resetCalculator(){
+    firstOperand = "";
+    secondOperand = "";
+    currentInputBuffer = "";
+    selectedOperator = "" ;
+    updateHistoryPanel("", "");
+    updatePrimaryDisplay("CLEARED!");
+}
+
+function resetOperatorAndBuffer(){
+    firstOperand = "";
+    selectedOperator = "";
+    currentInputBuffer = "";
+    secondOperand = "";
+}
