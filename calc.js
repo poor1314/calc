@@ -15,12 +15,6 @@ calculatorButtons.addEventListener("click", function(e){
     const validButton = NUMBER_BUTTONS.includes(buttonValue) || OPERATOR_BUTTONS.includes(buttonValue);
     const isNumber = NUMBER_BUTTONS.includes(buttonValue)
     const isOperator = OPERATOR_BUTTONS.includes(buttonValue)
-    console.log("current buttonValue", buttonValue);
-    console.log("firstOperand", firstOperand);
-    console.log("secondOperand", secondOperand);
-    console.log("selectedOperator", selectedOperator);
-    console.log("inputValue", inputValue);
-    console.log("");   
 
     // exit early for invalid button
     if(!validButton) return;
