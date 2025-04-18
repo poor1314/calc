@@ -2,6 +2,9 @@ let firstOperand = "";
 let secondOperand = "";
 let inputValue = "";
 let selectedOperator = "";
+const NUMBER_BUTTONS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "."];
+const OPERATOR_BUTTONS = ["+", "-", "x", "÷", "=", "CLEAR", "DELETE"];
+
 
 let calculatorButtons = document.querySelector(".buttons");
 let primaryDisplay = document.querySelector(".display");
@@ -9,13 +12,11 @@ let historyDisplay = document.querySelector(".displayMini");
 
 calculatorButtons.addEventListener("click", function(e){
     let buttonValue = e.target.textContent;
-    const firstOperandExist = firstOperand || firstOperand === 0; 
-    const NUMBER_BUTTONS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "."];
-    const OPERATOR_BUTTONS = ["+", "-", "x", "÷", "=", "CLEAR", "DELETE"];
     const validButton = NUMBER_BUTTONS.includes(buttonValue) || OPERATOR_BUTTONS.includes(buttonValue);
     const isNumber = NUMBER_BUTTONS.includes(buttonValue)
     const isOperator = OPERATOR_BUTTONS.includes(buttonValue)
-
+    const firstOperandExist = firstOperand || firstOperand === 0; 
+    
     // exit early for invalid button
     if(!validButton) return;
 
